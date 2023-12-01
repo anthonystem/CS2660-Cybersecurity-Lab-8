@@ -69,7 +69,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  padding-top: calc(64px + 2rem);
+  justify-content: center;
   gap: 3rem;
   position: fixed;
   left: 100%;
@@ -100,6 +100,7 @@ main {
 
 .landing {
   display: flex;
+  flex-direction: column;
   font-family: "Open Sans", sans-serif;
   height: 100vh;
 }
@@ -110,9 +111,9 @@ main {
 }
 
 /* ########## Media Queries/Breakpoints ########## */
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .navigation-bar {
-    padding: 0 16rem 0 16rem;
+    padding: 0 8rem 0 8rem;
   }
   .navigation-bar .navigation-links {
     display: flex;
@@ -125,5 +126,24 @@ main {
   }
   .navigation-bar .hamburger-button {
     display: none;
+  }
+  .landing {
+    justify-content: center;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+  .landing .landing-title h1 {
+    font-size: 4rem;
+  }
+}
+@media (min-width: 1200px) {
+  .navigation-bar {
+    padding: 0 16rem 0 16rem;
+  }
+  .landing {
+    padding-left: 16rem;
+    padding-right: 16rem;
   }
 }/*# sourceMappingURL=styles.css.map */
