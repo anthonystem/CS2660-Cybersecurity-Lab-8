@@ -53,4 +53,12 @@
   align-items: center;
   font-family: "Open Sans", sans-serif;
   padding: 2rem 1rem 2rem 1rem;
+}
+.landing .button-container {
+  gap: 1rem;
+}
+.landing .landing-button {
+  border: none;
+  padding: 0.5rem;
+  background-color: red;
 }/*# sourceMappingURL=styles.css.map */
