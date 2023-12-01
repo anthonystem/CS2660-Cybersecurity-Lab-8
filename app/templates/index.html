@@ -10,15 +10,15 @@
     </head>
     <body>
         <div class="navigation-bar">
+            <div class="navigation-logo">
+                <img src="../static/media/pymart_logo.svg" alt="PyMart logo.">
+            </div>
             <div aria-label="Hamburger button open". class="hamburger-button">
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
-                <div class="hamburger-line-short"></div>
+                <div class="hamburger-line"></div>
             </div>
             <div aria-label="Hamburger button close." class="hamburger-close-button">
-            </div>
-            <div class="navigation-logo">
-                <img src="../static/media/pymart_logo.svg" alt="PyMart logo.">
             </div>
             <nav class="navigation-links">
                 <a href="">Employee Log In</a>
@@ -44,17 +44,14 @@
             
             // Show navigation links on hamburger button click.
             hamburgerButton.addEventListener('click', () => {
-                hamburgerButton.style.display = "none";
-                hamburgerCloseButton.style.display = "flex";
-                navigationLinks.style.display = "flex";
-
+                navigationLinks.classList.toggle("show");
+                hamburgerCloseButton.classList.toggle("show");
             });
 
             // Hide navigation links on hamburger close button click.
             hamburgerCloseButton.addEventListener('click', () => {
-                hamburgerButton.style.display = "flex";
-                hamburgerCloseButton.style.display = "none";
-                navigationLinks.style.display = "none";
+                navigationLinks.classList.toggle("show");
+                hamburgerCloseButton.classList.toggle("show");
             });
         </script>
     </body>

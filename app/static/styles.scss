@@ -14,6 +14,9 @@
     height: 4rem;
     padding: 0 1rem 0 1rem;
     font-family: "Open Sans", sans-serif;
+    position: fixed;
+    width: 100%;
+    background-color: white;
 
     .hamburger-button {
         display: flex;
@@ -36,12 +39,18 @@
     }
 
     .hamburger-close-button {
-        position: relative;
+        position: absolute;
+        right: 1rem;
         height: 24px;
         width: 24px;
         display: none;
         flex-direction: column;
         justify-content: center;
+        z-index: 1;
+    }
+
+    .hamburger-close-button.show {
+        display: flex;
     }
     
     .hamburger-close-button::before,
@@ -69,8 +78,25 @@
 
     
     .navigation-links {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding-top: calc(64px + 2rem);
         gap: 3rem;
+        position: fixed;
+        left: 100%;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        overflow: hidden;
+        transition: 0.4s;
+    }
+    
+    .navigation-links.show {
+        display: flex;
+        transition: 0.4s;
+        left: 0;
     }
 
     .navigation-links a {
@@ -84,26 +110,45 @@
     }
 }
 
+main {
+    padding: calc(2rem + 64px) 1rem 2rem 1rem;
+}
+
 .landing {
     display: flex;
-    align-items: center;
     font-family: "Open Sans", sans-serif;
-    padding: 2rem 1rem 2rem 1rem;
-
-    .landing-title {
-
-    }
-    
-    .button-container {
-
-        gap: 1rem;
-    }
+    height: 100vh;
 
     .landing-button {
         border: none;
         padding: 0.5rem;
         background-color: red;
     }
-
-
 }
+
+
+/* ########## Media Queries/Breakpoints ########## */
+@media (min-width: 768px) {}
+
+@media (min-width: 992px) {
+    .navigation-bar {
+        padding: 0 16rem 0 16rem;
+        .navigation-links {
+            display: flex;
+            flex-direction: row;
+            position: static;
+            height: auto;
+            width: auto;
+            padding: 0;
+            background-color: transparent;
+        }
+    
+        .hamburger-button {
+            display: none;
+        }
+    }
+}
+
+@media (min-width: 1200px) {}
+
+@media (min-width: 1400px) {}
