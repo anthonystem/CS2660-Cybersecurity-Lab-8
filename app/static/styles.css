@@ -94,20 +94,29 @@
   text-decoration: underline;
 }
 
-main {
-  padding: calc(2rem + 64px) 1rem 2rem 1rem;
-}
-
 .landing {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
   font-family: "Open Sans", sans-serif;
   height: 100vh;
+  padding: 0 1rem 0 1rem;
+}
+.landing .button-container {
+  display: flex;
+  gap: 0.5rem;
 }
 .landing .landing-button {
   border: none;
-  padding: 0.5rem;
-  background-color: red;
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  background-color: #058ED9;
+  border-radius: 4px;
+  transition: 0.5s;
+}
+.landing .landing-button:hover {
+  transition: 0.5s;
+  box-shadow: inset 0px 0px 0px 2px #001b29;
 }
 
 /* ########## Media Queries/Breakpoints ########## */

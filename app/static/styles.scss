@@ -110,20 +110,33 @@
     }
 }
 
-main {
-    padding: calc(2rem + 64px) 1rem 2rem 1rem;
-}
-
 .landing {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
     font-family: "Open Sans", sans-serif;
     height: 100vh;
+    padding: 0 1rem 0 1rem;
+
+    .button-container {
+        display: flex;
+        gap: 0.5rem;
+    }
 
     .landing-button {
         border: none;
-        padding: 0.5rem;
-        background-color: red;
+        padding: 0.6rem 1rem 0.6rem 1rem;
+        background-color: #058ED9;
+        border-radius: 4px;
+        transition: 0.5s;
+    }
+
+    .landing-button:hover {
+        transition: 0.5s;
+        -webkit-box-shadow: inset 0px 0px 0px 2px #058ED9;
+        -moz-box-shadow: inset 0px 0px 0px 2px #058ED9;
+        box-shadow: inset 0px 0px 0px 2px #001b29;
     }
 }
 
