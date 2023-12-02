@@ -1,3 +1,10 @@
+/**
+* Styling for the PyMart Intranet System.
+*
+* CS 2660 OL1 - Cybersecurity Principles
+* Author: Anthony Stem
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap');
 
 * {
@@ -138,6 +145,10 @@
         -moz-box-shadow: inset 0px 0px 0px 2px #058ED9;
         box-shadow: inset 0px 0px 0px 2px #001b29;
     }
+}
+
+.content-section {
+    padding: calc(64px + 1rem) 1rem 1rem 1rem;
 }
 
 
