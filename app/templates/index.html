@@ -1,32 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="static/styles.css">
-    </head>
-    <body>
-        <div class="navigation-bar">
-            <div class="navigation-logo">
-                <img src="../static/media/pymart_logo.svg" alt="PyMart logo.">
-            </div>
-            <div aria-label="Hamburger button open". class="hamburger-button">
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-            </div>
-            <div aria-label="Hamburger button close." class="hamburger-close-button">
-            </div>
-            <nav class="navigation-links">
-                <a href="">Employee Log In</a>
-                <a href="">Register</a>
-            </nav>
-        </div>
 
-        <main class="landing">
+{% extends "layout.html" %}
+{% block content %}
             <div class="landing-title">
                 <p>Welcome to the</p>
                 <h1>PyMart Intranet System</h1>
@@ -35,24 +9,4 @@
                 <button class="landing-button">Log In</button>
                 <button class="landing-button">New Employee?</button>
             </div>
-        </main>
-
-        <script type="text/javascript">
-            const hamburgerButton = document.querySelector(".hamburger-button");
-            const hamburgerCloseButton = document.querySelector(".hamburger-close-button");
-            const navigationLinks = document.querySelector(".navigation-links");
-            
-            // Show navigation links on hamburger button click.
-            hamburgerButton.addEventListener('click', () => {
-                navigationLinks.classList.toggle("show");
-                hamburgerCloseButton.classList.toggle("show");
-            });
-
-            // Hide navigation links on hamburger close button click.
-            hamburgerCloseButton.addEventListener('click', () => {
-                navigationLinks.classList.toggle("show");
-                hamburgerCloseButton.classList.toggle("show");
-            });
-        </script>
-    </body>
-</html>
+{% endblock %}
