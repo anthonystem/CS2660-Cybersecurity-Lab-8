@@ -1,11 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-    <section class="content-section">
-        <h1>Log In</h1>
-        <h1>Log In</h1>
-        <h1>Log In</h1>
-        <h1>Log In</h1>
-        <h1>Log In</h1>
-        <h1>Log In</h1>
+    <section class="form-section">
+        <h1>Sign In</h1>
+
+        {% for error in form_errors %}
+        <div class="form-alert" role="alert">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+
+        <form class="form-body" method="POST">
+            <p>
+                <label for="username">Username</label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+            </p>
+            <p>
+                <label for="password">Password</label>
+                <input type="password" placeholder="Enter Password" name="password" required>      
+            </p>
+            <p>
+                <button type="submit">Log In</button>
+            </p>
+        </form>
     </section>
 {% endblock %}
