@@ -1,0 +1,190 @@
+{% extends "layout.html" %}
+{% block content %}
+    <section class="form-section">
+        <h1>Register</h1>
+
+        {% for error in form_errors %}
+        <div class="alert alert-failure" role="alert">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+
+        <form class="form-body" method="POST">
+            <div>
+                <label for="username">Username</label>
+                <input type="text" placeholder="Enter a Username" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input class="password-input" type="password" placeholder="Enter a Password" name="password" minlength="8" maxlength="25" required>    
+                <div class="password-requirements help-text">
+                    <h3>Password Requirements:</h3>
+                    <p id="minimum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Minimum length of 8 characters.</p>
+                    <p id="maximum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Maximum length of 25 characters.</p>
+                    <p id="number-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one number.</p>
+                    <p id="lowercase-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one lowercase letter.</p>
+                    <p id="uppercase-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one uppercase letter.</p>
+                    <p id="special-character-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one special character.</p>
+                </div>       
+            </div>
+            <div>
+                <label for="password-confirmation">Confirm Password</label>
+                <input type="password" placeholder="Enter Password Again" name="password-confirmation" minlength="8" maxlength="25" required>  
+            </div>
+            <div>
+                <button id="create-account" class="disabled" type="submit" disabled>Create Account</button>
+            </div>
+        </form>
+        <div class="form-bottom">
+            <p>Already have an account? <a href="login">Log In</a></p>
+        </div>
+    </section>
+    <script type="text/javascript">
+        const passwordInputBox = document.querySelector(".password-input");
+        const minimumLengthRequirement = document.getElementById("minimum-length-requirement");
+        const maximumLengthRequirement = document.getElementById("maximum-length-requirement");
+        const numberRequirement = document.getElementById("number-requirement");
+        const lowercaseRequirement = document.getElementById("lowercase-requirement");
+        const uppercaseRequirement = document.getElementById("uppercase-requirement");
+        const specialCharacterRequirement = document.getElementById("special-character-requirement");
+        const createAccountButton = document.getElementById("create-account");
+
+        var inputLength;
+        passwordInputBox.addEventListener('input', () => {
+            inputText = passwordInputBox.value;
+            inputLength = inputText.length;
+            console.log(inputText);
+            console.log(inputLength);
+
+            let meetsMinimum = false;
+            let meetsMaximum = false;
+            let hasNumber = false;
+            let hasLower = false;
+            let hasUpper = false;
+            let hasSpecial = false;
+            // Minimum length requirement.
+            if(inputLength >= 8) {
+                minimumLengthRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                minimumLengthRequirement.firstElementChild.classList.add("fa-check-circle");
+                meetsMinimum = true;
+                minimumLengthRequirement.style.color = "green";
+            } else if(inputLength < 8 && inputLength > 0) {
+                minimumLengthRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                minimumLengthRequirement.firstElementChild.classList.remove("fa-check-circle");
+                minimumLengthRequirement.style.color = "red";
+                meetsMinimum = false;
+            } else {
+                minimumLengthRequirement.style.color = "";
+                meetsMinimum = false;
+            }
+
+            // Maximum length requirement.
+            if(inputLength > 25) {
+                maximumLengthRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                maximumLengthRequirement.firstElementChild.classList.remove("fa-check-circle");
+                maximumLengthRequirement.style.color = "red";
+                meetsMaximum = false;
+            } else if(inputLength > 0 && inputLength <= 25) {
+                maximumLengthRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                maximumLengthRequirement.firstElementChild.classList.add("fa-check-circle");
+                maximumLengthRequirement.style.color = "green";
+                meetsMaximum = true;
+            } else {
+                maximumLengthRequirement.style.color = "";
+                meetsMaximum = false;
+            }
+
+            // Check character requirements.
+            for(let c = 0; c < inputText.length; c++) {
+                // Has number.
+                if(/[0-9]/.test(inputText[c])) {
+                    hasNumber = true;
+                }
+
+                // Has lowercase.
+                if(/[a-z]/.test(inputText[c])) {
+                    hasLower = true;
+                }
+
+                // Has uppercase.
+                if(/[A-Z]/.test(inputText[c])) {
+                    hasUpper = true;
+                }
+
+                // Has special character.
+                if(/[\"\'-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/.test(inputText[c])) {
+                    hasSpecial = true;
+                }
+
+
+            }   
+
+            // Handle number requirement.
+            if(hasNumber) {
+                numberRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                numberRequirement.firstElementChild.classList.add("fa-check-circle");
+                numberRequirement.style.color = "green";
+            } else if(!hasNumber && inputLength > 0) {
+                numberRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                numberRequirement.firstElementChild.classList.remove("fa-check-circle");
+                numberRequirement.style.color = "red";
+            } else {
+                maximumLengthRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                maximumLengthRequirement.firstElementChild.classList.remove("fa-check-circle");
+                numberRequirement.style.color = "";
+            }
+
+             // Handle lowercase requirement.
+            if(hasLower) {
+                lowercaseRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                lowercaseRequirement.firstElementChild.classList.add("fa-check-circle");
+                lowercaseRequirement.style.color = "green";
+            } else if(!hasNumber && inputLength > 0) {
+                lowercaseRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                lowercaseRequirement.firstElementChild.classList.remove("fa-check-circle");
+                lowercaseRequirement.style.color = "red";
+            } else {
+                lowercaseRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                lowercaseRequirement.firstElementChild.classList.remove("fa-check-circle");
+                lowercaseRequirement.style.color = "";
+            }
+
+            // Handle uppercase requirement.
+            if(hasUpper) {
+                uppercaseRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                uppercaseRequirement.firstElementChild.classList.add("fa-check-circle");
+                uppercaseRequirement.style.color = "green";
+            } else if(!hasNumber && inputLength > 0) {
+                uppercaseRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                uppercaseRequirement.firstElementChild.classList.remove("fa-check-circle");
+                uppercaseRequirement.style.color = "red";
+            } else {
+                uppercaseRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                uppercaseRequirement.firstElementChild.classList.remove("fa-check-circle");
+                uppercaseRequirement.style.color = "";
+            }
+            
+            // Handle special character requirement.
+            if(hasSpecial) {
+                specialCharacterRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                specialCharacterRequirement.firstElementChild.classList.add("fa-check-circle");
+                specialCharacterRequirement.style.color = "green";
+            } else if(!hasNumber && inputLength > 0) {
+                specialCharacterRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                specialCharacterRequirement.firstElementChild.classList.remove("fa-check-circle");
+                specialCharacterRequirement.style.color = "red";
+            } else {
+                specialCharacterRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                specialCharacterRequirement.firstElementChild.classList.remove("fa-check-circle");
+                specialCharacterRequirement.style.color = "";
+            }
+
+            if(meetsMinimum && meetsMaximum && hasNumber && hasLower && hasUpper && hasSpecial) {
+                console.log("allow!");
+                createAccountButton.disabled = false;
+            } else {
+                createAccountButton.disabled = true;
+            }
+        })
+    </script>
+{% endblock %}

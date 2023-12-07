@@ -68,7 +68,7 @@ def login():
     return render_template("login.html", title="PyMart Intranet System | Login", page="login", form_errors=errors)
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     # Render dashboard if session is already set.
     if session.get("user_id", None) is not None:
