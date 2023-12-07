@@ -76,7 +76,12 @@ def register():
     
     errors = []
     if request.method == "POST":
-        pass
+        new_username = request.form.get("new-username")
+        new_password = request.form.get("new-password")
+        password_confirmation = request.form.get("password-confirmation")
+
+        if not authentication.validate_password(new_password):
+            errors.append("Password does not meet the requirements.")
         ### Get registration form data.
 
         ### Validate data.

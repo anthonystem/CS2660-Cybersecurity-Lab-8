@@ -12,11 +12,11 @@
         <form class="form-body" method="POST">
             <div>
                 <label for="username">Username</label>
-                <input type="text" placeholder="Enter a Username" name="username" required>
+                <input type="text" placeholder="Enter a Username" name="new-username" required>
             </div>
             <div>
                 <label for="password">Password</label>
-                <input class="password-input" type="password" placeholder="Enter a Password" name="password" minlength="8" maxlength="25" required>    
+                <input class="password-input" type="password" placeholder="Enter a Password" name="new-password" minlength="8" maxlength="25" required>    
                 <div class="password-requirements help-text">
                     <p id="minimum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Minimum length of 8 characters.</p>
                     <p id="maximum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Maximum length of 25 characters.</p>
@@ -31,7 +31,7 @@
                 <input type="password" placeholder="Enter Password Again" name="password-confirmation" minlength="8" maxlength="25" required>  
             </div>
             <div>
-                <button id="create-account" class="disabled" type="submit" disabled>Create Account</button>
+                <button id="create-account" type="submit" disabled>Create Account</button>
             </div>
         </form>
         <div class="form-bottom">
