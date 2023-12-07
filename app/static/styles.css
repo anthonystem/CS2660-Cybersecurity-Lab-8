@@ -21,7 +21,6 @@
   position: fixed;
   width: 100%;
   background-color: white;
-  z-index: 1;
 }
 .navigation-bar .hamburger-button {
   display: flex;
@@ -48,7 +47,7 @@
   display: none;
   flex-direction: column;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
 }
 .navigation-bar .hamburger-close-button.show {
   display: flex;
@@ -85,6 +84,7 @@
   height: 100%;
   background-color: white;
   overflow: hidden;
+  z-index: 1;
   transition: 0.4s;
 }
 .navigation-bar .navigation-links.show {
@@ -107,7 +107,7 @@
   justify-content: center;
   gap: 1rem;
   font-family: "Open Sans", sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   padding: 0 1rem 0 1rem;
 }
 .landing .button-container {
@@ -128,11 +128,16 @@
   box-shadow: inset 0px 0px 0px 2px #001b29;
 }
 
+.content-wrapper {
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+}
+
 .login {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   padding-left: 1rem;
   padding-right: 1rem;
   font-family: "Roboto", sans-serif;
@@ -142,7 +147,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   padding-left: 1rem;
   padding-right: 1rem;
   font-family: "Roboto", sans-serif;
@@ -153,7 +158,7 @@
   flex-direction: column;
   gap: 1rem;
   background-color: #f7f7f7;
-  padding: 2rem;
+  padding: 1rem;
   width: 24rem;
 }
 .form-section h1 {
@@ -256,6 +261,9 @@
   .login {
     padding-left: 8rem;
     padding-right: 8rem;
+  }
+  .form-section {
+    padding: 2rem;
   }
 }
 @media (min-width: 1200px) {
