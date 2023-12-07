@@ -8,14 +8,15 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object("config")
 app.secret_key = app.config['SECRET_KEY']
 
+
 @app.route("/")
 def index():
     # Render dashboard if session is already set.
     if session.get("username", None) is not None:
         return redirect("/dashboard")
     
-    print(app.config["SECRET_KEY"])
     return render_template("index.html", title="PyMart Intranet System | Welcome", page="landing")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -60,14 +61,14 @@ def login():
 
         errors.append("Incorrect username or password. Please try again.")
 
-
-
     return render_template("login.html", title="PyMart Intranet System | Login", page="login", form_errors=errors)
+
 
 @app.route("/dashboard")
 def dashboard():
     print(session)
     return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
