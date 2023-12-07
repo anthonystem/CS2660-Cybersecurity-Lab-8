@@ -25,8 +25,12 @@
             <div aria-label="Hamburger button close." class="hamburger-close-button">
             </div>
             <nav class="navigation-links">
+                {% if not session["user_id"] %}
                 <a href="/login">Employee Log In</a>
                 <a href="">Register</a>
+                {% else %}
+                <a href="">Log Out</a>
+                {% endif %}
             </nav>
         </div>
 
