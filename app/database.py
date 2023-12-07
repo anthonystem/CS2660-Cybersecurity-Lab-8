@@ -26,7 +26,7 @@ class Database:
         if test_mode:
             test_username = "test"
             test_password = hash_password("Password123!")
-            test_access_level = "standard"
+            test_access_level = "STANDARD"
             cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", (test_username, test_password, test_access_level)) 
 
         connection.commit()

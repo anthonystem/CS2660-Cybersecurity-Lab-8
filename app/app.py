@@ -8,21 +8,27 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object("config")
 app.secret_key = app.config['SECRET_KEY']
 
-
 @app.route("/")
+@app.route("/index")
 def index():
     # Render dashboard if session is already set.
-    if session.get("username", None) is not None:
-        return redirect("/dashboard")
+    if session.get("user_id", None) is not None:
+        return redirect(url_for("dashboard"))
     
     return render_template("index.html", title="PyMart Intranet System | Welcome", page="landing")
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user_id", None)
+    return redirect(url_for("index"))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # Render dashboard if session is already set.
-    if session.get("username", None) is not None:
-        return redirect("/dashboard")
+    if session.get("user_id", None) is not None:
+        return redirect(url_for("dashboard"))
     
     errors = []
     if request.method == "POST":
@@ -43,7 +49,6 @@ def login():
             valid_credentials = authentication.authenticate(password, stored_password[0])
 
         ### Handle valid and invalid credentials.
-
         # Redirect user to dashboard and initialize session if correct login data.
         # Otherwise, append incorrect username/password error and re-render login.
         if valid_credentials:
@@ -51,7 +56,6 @@ def login():
             cursor.execute("SELECT user_id FROM Users WHERE username = ?", (username,))
             user_id = cursor.fetchone()[0]
             session["user_id"] = user_id
-            session["username"] = username
             cursor.close()
             connection.close()
             return redirect(url_for("dashboard"))
@@ -64,9 +68,32 @@ def login():
     return render_template("login.html", title="PyMart Intranet System | Login", page="login", form_errors=errors)
 
 
+@app.route("/register")
+def register():
+    # Render dashboard if session is already set.
+    if session.get("user_id", None) is not None:
+        return redirect(url_for("dashboard"))
+    
+    errors = []
+    if request.method == "POST":
+        pass
+        ### Get registration form data.
+
+        ### Validate data.
+
+        ### Add user to database.
+
+        ### Redirect to dashboard.
+
+    return render_template("register.html", title="PyMart Intranet System | Register", page="register", form_errors=errors)
+
+
 @app.route("/dashboard")
 def dashboard():
-    print(session)
+    # Redirect to index if user is not logged in.
+    if session.get("user_id", None) is None:
+        return redirect(url_for("index"))
+    
     return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard")
 
 
