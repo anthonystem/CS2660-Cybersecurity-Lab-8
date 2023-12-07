@@ -148,13 +148,21 @@
   text-align: center;
   font-family: "Roboto", sans-serif;
 }
-.form-section .form-alert {
+.form-section .alert {
   padding: 0.75rem;
+  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+}
+.form-section .alert-success {
+  position: absolute;
+  background-color: #ddffdd;
+  color: #006600;
+  border: 2px solid #bbffbb;
+}
+.form-section .alert-failure {
   background-color: #f9d2d8;
   color: #902047;
   border: 2px solid #f8c9d1;
-  border-radius: 4px;
-  font-family: "Roboto", sans-serif;
 }
 .form-section .form-body {
   display: flex;
