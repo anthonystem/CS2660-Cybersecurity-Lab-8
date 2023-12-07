@@ -11,13 +11,16 @@
 
         <form class="form-body" method="POST">
             <div>
-                <label for="username">Username</label>
-                <input type="text" placeholder="Enter a Username" name="new-username" required>
+                <label for="username-input">Username</label>
+                <input type="text" id="username-input" name="new-username" placeholder="Enter a Username" minlength="3" maxlength="16" required>
+                <div class="help-text">
+                    <p id="username-requirement"><i class="fa-regular fa-circle-xmark"></i> Username must be at least 3 characters and at most 16 characters long.</p>
+                </div>   
             </div>
             <div>
-                <label for="password">Password</label>
-                <input id="password-input" class="password-input" type="password" placeholder="Enter a Password" name="new-password" minlength="8" maxlength="25" required>    
-                <div class="password-requirements help-text">
+                <label for="password-input">Password</label>
+                <input type="password" id="password-input" name="new-password" placeholder="Enter a Password" minlength="8" maxlength="25" required>    
+                <div class="help-text">
                     <p id="minimum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Minimum length of 8 characters.</p>
                     <p id="maximum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Maximum length of 25 characters.</p>
                     <p id="number-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one number.</p>
@@ -28,7 +31,7 @@
             </div>
             <div>
                 <label for="password-confirmation">Confirm Password</label>
-                <input id="password-confirmation" type="password" placeholder="Enter Password Again" name="password-confirmation" minlength="8" maxlength="25" required>  
+                <input id="password-confirmation" type="password" name="password-confirmation" placeholder="Enter Password Again" minlength="8" maxlength="25" required>  
             </div>
             <div>
                 <button id="create-account" type="submit" disabled>Create Account</button>
@@ -39,6 +42,10 @@
         </div>
     </section>
     <script type="text/javascript">
+        // Username input elements.
+        const usernameInputBox = document.getElementById("username-input");
+        const usernameRequirement = document.getElementById("username-requirement");
+        // Password input elements.
         const passwordInputBox = document.getElementById("password-input");
         const minimumLengthRequirement = document.getElementById("minimum-length-requirement");
         const maximumLengthRequirement = document.getElementById("maximum-length-requirement");
@@ -48,17 +55,21 @@
         const specialCharacterRequirement = document.getElementById("special-character-requirement");
         const createAccountButton = document.getElementById("create-account");
         const specialCharacters = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        // Password confirmation elements.
         const passwordConfirmationInputBox = document.getElementById("password-confirmation");
 
+        var usernameInput = usernameInputBox.value;
         var passwordInput = passwordInputBox.value;
         var passwordConfirmationInput = passwordConfirmationInputBox.value;
+
+        var usernameEntered = false;
         var meetsPasswordPolicy = false;
         var passwordsMatch = false;
 
         function checkFormComplete() {
             // Enable create account button if passwords match and policy requirements are met.
             console.log("Check");
-            if(meetsPasswordPolicy && passwordsMatch) {
+            if(usernameEntered && meetsPasswordPolicy && passwordsMatch) {
                 console.log("allow!");
                 createAccountButton.disabled = false;
             } else {
@@ -66,6 +77,27 @@
                 createAccountButton.disabled = true;
             }
         }
+
+        usernameInputBox.addEventListener('input', () => {
+            usernameInput = usernameInputBox.value;
+            if(usernameInput.length >= 3 && usernameInput.length <= 16) {
+                usernameRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                usernameRequirement.firstElementChild.classList.add("fa-check-circle");
+                usernameRequirement.style.color = "green";
+                usernameEntered = true;
+            } else if(usernameInput.length > 0) {
+                usernameRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                usernameRequirement.firstElementChild.classList.remove("fa-check-circle");
+                usernameRequirement.style.color = "red";
+                usernameEntered = false;
+            } else {
+                usernameRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                usernameRequirement.firstElementChild.classList.remove("fa-check-circle");
+                usernameRequirement.style.color = "";
+            }
+
+            checkFormComplete()
+        });
 
         passwordInputBox.addEventListener('input', () => {
             let meetsMinimum = false;
@@ -147,8 +179,8 @@
                 numberRequirement.firstElementChild.classList.remove("fa-check-circle");
                 numberRequirement.style.color = "red";
             } else {
-                maximumLengthRequirement.firstElementChild.classList.add("fa-circle-xmark");
-                maximumLengthRequirement.firstElementChild.classList.remove("fa-check-circle");
+                numberRequirement.firstElementChild.classList.add("fa-circle-xmark");
+                numberRequirement.firstElementChild.classList.remove("fa-check-circle");
                 numberRequirement.style.color = "";
             }
 
@@ -212,11 +244,13 @@
             passwordConfirmation = passwordConfirmationInputBox.value;
             console.log(passwordInput);
             console.log(passwordConfirmation);
-            if(passwordConfirmation == passwordInput) {
+            if(passwordConfirmation == passwordInput && passwordConfirmation.length > 0) {
                 console.log("They match.")
                 passwordsMatch = true;
             } else {
-                console.log("They don't match.")
+                passwordConfirmationRequirement.firstElementChild.classList.remove("fa-circle-xmark");
+                passwordConfirmationRequirement.firstElementChild.classList.add("fa-check-circle");
+                passwordConfirmationRequirement.style.color = "";
                 passwordsMatch = false;
             }
 
