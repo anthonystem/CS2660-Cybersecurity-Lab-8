@@ -80,8 +80,10 @@ def register():
         new_password = request.form.get("new-password")
         password_confirmation = request.form.get("password-confirmation")
 
-        if not authentication.validate_password(new_password):
-            errors.append("Password does not meet the requirements.")
+        if authentication.validate_password(new_password):
+            pass
+        else:
+            errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
         ### Get registration form data.
 
         ### Validate data.

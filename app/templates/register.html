@@ -16,7 +16,7 @@
             </div>
             <div>
                 <label for="password">Password</label>
-                <input class="password-input" type="password" placeholder="Enter a Password" name="new-password" minlength="8" maxlength="25" required>    
+                <input id="password-input" class="password-input" type="password" placeholder="Enter a Password" name="new-password" minlength="8" maxlength="25" required>    
                 <div class="password-requirements help-text">
                     <p id="minimum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Minimum length of 8 characters.</p>
                     <p id="maximum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Maximum length of 25 characters.</p>
@@ -28,7 +28,7 @@
             </div>
             <div>
                 <label for="password-confirmation">Confirm Password</label>
-                <input type="password" placeholder="Enter Password Again" name="password-confirmation" minlength="8" maxlength="25" required>  
+                <input id="password-confirmation" type="password" placeholder="Enter Password Again" name="password-confirmation" minlength="8" maxlength="25" required>  
             </div>
             <div>
                 <button id="create-account" type="submit" disabled>Create Account</button>
@@ -39,7 +39,7 @@
         </div>
     </section>
     <script type="text/javascript">
-        const passwordInputBox = document.querySelector(".password-input");
+        const passwordInputBox = document.getElementById("password-input");
         const minimumLengthRequirement = document.getElementById("minimum-length-requirement");
         const maximumLengthRequirement = document.getElementById("maximum-length-requirement");
         const numberRequirement = document.getElementById("number-requirement");
@@ -48,8 +48,25 @@
         const specialCharacterRequirement = document.getElementById("special-character-requirement");
         const createAccountButton = document.getElementById("create-account");
         const specialCharacters = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+        const passwordConfirmationInputBox = document.getElementById("password-confirmation");
 
-        var inputLength;
+        var passwordInput = passwordInputBox.value;
+        var passwordConfirmationInput = passwordConfirmationInputBox.value;
+        var meetsPasswordPolicy = false;
+        var passwordsMatch = false;
+
+        function checkFormComplete() {
+            // Enable create account button if passwords match and policy requirements are met.
+            console.log("Check");
+            if(meetsPasswordPolicy && passwordsMatch) {
+                console.log("allow!");
+                createAccountButton.disabled = false;
+            } else {
+                console.log("don't allow");
+                createAccountButton.disabled = true;
+            }
+        }
+
         passwordInputBox.addEventListener('input', () => {
             let meetsMinimum = false;
             let meetsMaximum = false;
@@ -58,10 +75,8 @@
             let hasUpper = false;
             let hasSpecial = false;
             
-            inputText = passwordInputBox.value;
-            inputLength = inputText.length;
-            console.log(inputText);
-            console.log(inputLength);
+            passwordInput = passwordInputBox.value;
+            let inputLength = passwordInput.length;
 
             // Minimum length requirement.
             if(inputLength >= 8) {
@@ -100,24 +115,24 @@
             }
 
             // Check character requirements.
-            for(let c = 0; c < inputText.length; c++) {
+            for(let c = 0; c < passwordInput.length; c++) {
                 // Has number.
-                if(/[0-9]/.test(inputText[c])) {
+                if(/[0-9]/.test(passwordInput[c])) {
                     hasNumber = true;
                 }
 
                 // Has lowercase.
-                if(/[a-z]/.test(inputText[c])) {
+                if(/[a-z]/.test(passwordInput[c])) {
                     hasLower = true;
                 }
 
                 // Has uppercase.
-                if(/[A-Z]/.test(inputText[c])) {
+                if(/[A-Z]/.test(passwordInput[c])) {
                     hasUpper = true;
                 }
 
                 // Has special character.
-                if(specialCharacters.includes(inputText[c])) {
+                if(specialCharacters.includes(passwordInput[c])) {
                     hasSpecial = true;
                 }
             }   
@@ -185,18 +200,27 @@
             }
 
             if(meetsMinimum && meetsMaximum && hasNumber && hasLower && hasUpper && hasSpecial) {
-                console.log("allow!");
-                createAccountButton.disabled = false;
+                meetsPasswordPolicy = true;
             } else {
-                createAccountButton.disabled = true;
+                meetsPasswordPolicy = false;
             }
 
-            console.log(meetsMinimum);
-            console.log(meetsMaximum);
-            console.log(hasNumber);
-            console.log(hasLower);
-            console.log(hasUpper);
-            console.log(hasSpecial);
-        })
+            checkFormComplete();
+        });
+
+        passwordConfirmationInputBox.addEventListener('input', () => {
+            passwordConfirmation = passwordConfirmationInputBox.value;
+            console.log(passwordInput);
+            console.log(passwordConfirmation);
+            if(passwordConfirmation == passwordInput) {
+                console.log("They match.")
+                passwordsMatch = true;
+            } else {
+                console.log("They don't match.")
+                passwordsMatch = false;
+            }
+
+            checkFormComplete();
+        });
     </script>
 {% endblock %}
