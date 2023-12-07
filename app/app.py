@@ -1,6 +1,6 @@
 import authentication
 from database import Database
-from flask import Flask, flash, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, session, url_for
 import sqlite3
 import config
 
@@ -21,7 +21,6 @@ def index():
 @app.route("/logout")
 def logout():
     session.pop("user_id", None)
-    flash("Logged out successfully.", category="success")
     return redirect(url_for("index"))
 
 
