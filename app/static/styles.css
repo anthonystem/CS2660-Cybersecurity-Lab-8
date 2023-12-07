@@ -114,9 +114,10 @@
   gap: 0.5rem;
 }
 .landing .landing-button {
-  border: none;
   padding: 0.6rem 1rem 0.6rem 1rem;
   background-color: #058ED9;
+  color: black;
+  text-decoration: none;
   border-radius: 4px;
   font-family: "Roboto", sans-serif;
   transition: 0.5s;
