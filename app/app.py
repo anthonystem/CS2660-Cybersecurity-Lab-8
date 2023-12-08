@@ -70,7 +70,6 @@ def login():
                     return render_template("login.html", title="PyMart Intranet System | Login", page="login", success_alerts=successes, error_alerts=errors)
                 elif stored_password is not None:
                     valid_credentials = authentication.authenticate(password, stored_password)
-                    print(valid_credentials)
 
         except sqlite3.OperationalError:
             errors.append("Error establishing a database connection. Please contact the system administrator.")
@@ -175,9 +174,7 @@ def register():
         # Add user to database (default access level to "STANDARD") if valid credentials.
         if valid_credentials:
             # Hash password and insert information into database.
-            print(new_password)
             new_password = authentication.hash_password(new_password)
-            print(new_password)
             connection = sqlite3.connect(config.DATABASE_FILE)
             cursor = connection.cursor()
 
