@@ -182,6 +182,7 @@ main {
     gap: 1rem;
     background-color: #f7f7f7;
     padding: 1rem;
+    margin: 1rem;
     max-width: 24rem;
 
     h1 {
@@ -262,6 +263,72 @@ main {
 }
 
 
+.dashboard {
+    min-height: 100vh;
+    font-family: "Roboto", sans-serif;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    h1 {
+        font-family: "Inter", sans-serif;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.application-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 1rem;
+    max-width: 16rem;
+    margin: auto;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 1rem 4rem 1rem;
+    background-color: white;
+    border: 4px solid black;
+    border-radius: 8px;
+    position: relative;
+    transition: 0.25s ease-in;
+    box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15), -8px 16px 16px rgba(0, 0, 0, 0.15);
+
+    i {
+        font-size: 8rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    }
+}
+
+.card:hover {
+    transition: 0.25s ease-out;
+    background-color: #888888;
+
+    h2 {
+        text-decoration: underline;
+    }
+}
+
+.card-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
 
 
 /* ########## Media Queries/Breakpoints ########## */
@@ -304,6 +371,20 @@ main {
     .form-section {
         padding: 2rem;
     }
+
+    .dashboard {
+        padding-left: 8rem;
+        padding-right: 8rem;
+    }
+
+    .application-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: 1rem;
+        max-width: 36rem;
+        margin: 0;
+    }
 }
 
 @media (min-width: 992px) {
@@ -323,6 +404,21 @@ main {
     .login {
         padding-left: 16rem;
         padding-right: 16rem;
+    }
+
+    .dashboard {
+        padding-top: 2rem;
+        padding-left: 16rem;
+        padding-right: 16rem;
+        padding-bottom: 2rem;
+    }
+
+    .application-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: 1rem;
+        max-width: 68rem;
     }
 }
 

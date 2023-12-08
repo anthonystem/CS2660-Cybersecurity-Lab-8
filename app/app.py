@@ -53,10 +53,11 @@ def login():
         # Otherwise, append incorrect username/password error and re-render login.
         if valid_credentials:
             # Get user_id and create session with user_id and username; redirect to dashboard after.
-            cursor.execute("SELECT user_id FROM Users WHERE username = ?", (username,))
-            user_id = cursor.fetchone()[0]
+            cursor.execute("SELECT user_id, username, access_level FROM Users WHERE username = ?", (username,))
+            user_id, username, access_level = cursor.fetchone()
             session["user_id"] = user_id
-            session
+            session["username"] = username
+            session["access_level"] = access_level
             cursor.close()
             connection.close()
             return redirect(url_for("dashboard"))
@@ -125,7 +126,7 @@ def dashboard():
     if session.get("user_id", None) is None:
         return redirect(url_for("index"))
     
-    return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard")
+    return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard", username=session["username"])
 
 
 if __name__ == "__main__":
