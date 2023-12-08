@@ -199,7 +199,7 @@ main {
   font-size: small;
 }
 .form-section #create-account:disabled {
-  opacity: 0.25;
+  background-color: #baddef;
   cursor: not-allowed;
 }
 .form-section .help-text {
@@ -261,6 +261,7 @@ main {
   position: relative;
   transition: 0.25s ease-in;
   box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15), -8px 16px 16px rgba(0, 0, 0, 0.15);
+  z-index: 0;
 }
 .card i {
   font-size: 8rem;
@@ -288,7 +289,7 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: -1;
 }
 
 /* ########## Media Queries/Breakpoints ########## */

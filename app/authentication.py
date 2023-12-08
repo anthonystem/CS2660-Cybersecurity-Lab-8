@@ -5,6 +5,15 @@ from string import ascii_lowercase, ascii_uppercase
 import sqlite3
 
 def hash_password(password: str) -> str:
+    """Hashes a given password and pre-pends a salt of
+    length 40.
+
+    Args:
+        password (str): The password to hash.
+
+    Returns:
+        str: The salted and hashed password.
+    """
     # Generate random salt that is 40 characters long.
     salt = os.urandom(20).hex()
 
@@ -20,6 +29,16 @@ def hash_password(password: str) -> str:
 
 
 def authenticate(plaintext_password: str, stored: str) -> bool:
+    """Verifies if a provided plaintext password matches a corresponding
+    salted password, with a salt length of 40, stored in the database.
+
+    Args:
+        plaintext_password (str): The password to authenticate.
+        stored (str): The salted password hash in the database.
+
+    Returns:
+        bool: True if the password matches; otherwise, False.
+    """
     salt_length = 40
 
     # Get salt and password hash from stored salt + hashed password.
@@ -116,3 +135,37 @@ def username_exists(test_username: str) -> bool:
 
     return True if result[0] == 1 else False
 
+
+def has_access_permission(user_access_level: str, minimum_access_level: str) -> bool:
+    """Checks if a user has a sufficient access level for access permission.
+    Access levels include the following:
+    - STANDARD: Default access level. Least permissions.
+    - DEPARTMENT_MANAGER: Second highest access level.
+    - ADMIN: Highest access level.
+
+    Args:
+        user_access_level (str): The user's access level.
+        minimum_access_level (str): The minimum access level to receive access permission.
+
+    Returns:
+        bool: True if the user meets the minimum access level; otherwise, False.
+    """
+    user_access_level = user_access_level.upper()
+    access_levels = {"STANDARD": 0, "DEPARTMENT_MANAGER": 1, "ADMIN": 2}
+
+    # Return False if user or minimum access level are invalid options.
+    if user_access_level not in access_levels.keys() or minimum_access_level not in access_levels.keys():
+        return False
+    
+    user_access_value = access_levels.get(user_access_level)
+    minimum_access_value = access_levels.get(minimum_access_level)
+    
+    print(user_access_value)
+    print(minimum_access_value)
+    return user_access_value >= minimum_access_value
+
+    
+
+    
+
+    

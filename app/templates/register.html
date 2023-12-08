@@ -3,7 +3,7 @@
     <section class="form-section">
         <h1>Register</h1>
 
-        {% for error in form_errors %}
+        {% for error in error_alerts %}
         <div class="alert alert-failure" role="alert">
             <p>{{ error }}</p>
         </div>

@@ -64,7 +64,7 @@ def login():
         
         cursor.close()
         connection.close()
-
+        
         errors.append("Incorrect username or password. Please try again.")
 
     return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
@@ -117,7 +117,7 @@ def register():
             # Redirect to login.
             return redirect(url_for("login"))
 
-    return render_template("register.html", title="PyMart Intranet System | Register", page="register", alert_errors=errors)
+    return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
 
 
 @app.route("/dashboard")
@@ -127,6 +127,69 @@ def dashboard():
         return redirect(url_for("index"))
     
     return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard", username=session["username"])
+
+
+@app.route("/time-report")
+def time_report():
+    # Redirect to index if user is not logged in.
+    if session.get("user_id", None) is None:
+        return redirect(url_for("index"))
+    
+    # Check if user has access to view page.
+    # >> Access level must be, at least, STANDARD.
+    access_level = session["access_level"]
+    permission = authentication.has_access_permission(access_level, "STANDARD")
+    print(access_level)
+    print("Permissions?", permission)
+
+    return render_template("time-report.html", title="PyMart Intranet System | Time Report", page="time-report", has_access=permission, application="Time Report")
+
+
+@app.route("/inventory")
+def inventory():
+    # Redirect to index if user is not logged in.
+    if session.get("user_id", None) is None:
+        return redirect(url_for("index"))
+    
+    # Check if user has access to view page.
+    # >> Access level must be, at least, DEPARTMENT_MANAGER.
+    access_level = session["access_level"]
+    permission = authentication.has_access_permission(access_level, "DEPARTMENT_MANAGER")
+    print(access_level)
+    print("Permissions?", permission)
+    
+    return render_template("time-report.html", title="PyMart Intranet System | Time Report", page="inventory", has_access=permission, application="Inventory")
+
+
+@app.route("/job-application-manager")
+def job_application_manager():
+    # Redirect to index if user is not logged in.
+    if session.get("user_id", None) is None:
+        return redirect(url_for("index"))
+    
+    # Check if user has access to view page.
+    # >> Access level must be, at least, DEPARTMENT_MANAGER.
+    access_level = session["access_level"]
+    permission = authentication.has_access_permission(access_level, "DEPARTMENT_MANAGER")
+    print(access_level)
+    print("Permissions?", permission)
+
+    return render_template("time-report.html", title="PyMart Intranet System | Time Report", page="job-application-manager", has_access=permission, application="Job Application Management")
+
+@app.route("/admin")
+def admin():
+    # Redirect to index if user is not logged in.
+    if session.get("user_id", None) is None:
+        return redirect(url_for("index"))
+    
+    # Check if user has access to view page.
+    # >> Access level must be ADMINISTRATOR.
+    access_level = session["access_level"]
+    permission = authentication.has_access_permission(access_level, "ADMIN")
+    print(access_level)
+    print("Permissions?", permission)
+
+    return render_template("time-report.html", title="PyMart Intranet System | Time Report", page="admin", has_access=permission, application="Admin")
 
 
 if __name__ == "__main__":
