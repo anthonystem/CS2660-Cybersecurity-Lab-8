@@ -1,6 +1,8 @@
+import config
 import hashlib
 import os
 from string import ascii_lowercase, ascii_uppercase
+import sqlite3
 
 def hash_password(password: str) -> str:
     # Generate random salt that is 40 characters long.
@@ -91,3 +93,26 @@ def validate_password(password: str) -> bool:
         return False
     
     return True
+
+
+def username_exists(test_username: str) -> bool:
+    """Checks if the User table already contains an account with the
+    supplied username.
+
+    Args:
+        test_username (str): The username to be checked.
+
+    Returns:
+        bool: True if the username already exists; otherwise, false.
+    """
+    connection = sqlite3.connect(config.DATABASE_FILE)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT EXISTS(SELECT 1 FROM Users WHERE username = ? LIMIT 1)", (test_username,))
+    result = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    return True if result[0] == 1 else False
+

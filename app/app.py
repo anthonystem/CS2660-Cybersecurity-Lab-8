@@ -56,6 +56,7 @@ def login():
             cursor.execute("SELECT user_id FROM Users WHERE username = ?", (username,))
             user_id = cursor.fetchone()[0]
             session["user_id"] = user_id
+            session
             cursor.close()
             connection.close()
             return redirect(url_for("dashboard"))
@@ -65,7 +66,7 @@ def login():
 
         errors.append("Incorrect username or password. Please try again.")
 
-    return render_template("login.html", title="PyMart Intranet System | Login", page="login", form_errors=errors)
+    return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -80,19 +81,42 @@ def register():
         new_password = request.form.get("new-password")
         password_confirmation = request.form.get("password-confirmation")
 
-        if authentication.validate_password(new_password):
-            pass
+        valid_credentials = True
+        # Check password matches confirmation password.
+        if new_password == password_confirmation:
+            # Check if username exists already.
+            if authentication.username_exists(new_username):
+                errors.append("Username is already taken. Please try again.")
+                valid_credentials = False
+            # Check that username meets requirements.
+            if not authentication.validate_username(new_username):
+                errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
+                valid_credentials = False
+            # Check that password meets requirements described in password policy.
+            if not authentication.validate_password(new_password):
+                errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
+                valid_credentials = False
         else:
-            errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
-        ### Get registration form data.
+            errors.append("Passwords do not match. Please try again.")
+            valid_credentials = False
 
-        ### Validate data.
+        # Add user to database (default access level to "STANDARD") if valid credentials.
+        if valid_credentials:
+            # Hash password and insert information into database.
+            new_password = authentication.hash_password(new_password)
 
-        ### Add user to database.
+            connection = sqlite3.connect(config.DATABASE_FILE)
+            cursor = connection.cursor()
 
-        ### Redirect to dashboard.
+            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?)", (new_username, new_password, "STANDARD"))
+            connection.commit()
+            cursor.close()
+            connection.close()
 
-    return render_template("register.html", title="PyMart Intranet System | Register", page="register", form_errors=errors)
+            # Redirect to login.
+            return redirect(url_for("login"))
+
+    return render_template("register.html", title="PyMart Intranet System | Register", page="register", alert_errors=errors)
 
 
 @app.route("/dashboard")

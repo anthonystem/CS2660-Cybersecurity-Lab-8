@@ -151,6 +151,10 @@
     }
 }
 
+main {
+    overflow-x: auto;
+}
+
 .content-wrapper {
     margin-top: calc(4rem + 1rem);
     margin-bottom: 1rem;
@@ -161,8 +165,6 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding-left: 1rem;
-    padding-right: 1rem;
     font-family: "Roboto", sans-serif;
 }
 
@@ -171,8 +173,6 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding-left: 1rem;
-    padding-right: 1rem;
     font-family: "Roboto", sans-serif;
 }
 
@@ -261,9 +261,7 @@
     border: 2px solid #f8c9d1;
 }
 
-.content-section {
-    padding: calc(64px + 1rem) 1rem 1rem 1rem;
-}
+
 
 
 /* ########## Media Queries/Breakpoints ########## */
