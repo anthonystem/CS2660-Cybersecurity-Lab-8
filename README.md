@@ -88,4 +88,42 @@ You can also manually install each module listed in the requirements file if nee
 
 
 ### Running the Flask Application
-While inside the project directory, execute
+While inside the project directory, execute the following command to run the Flask application:
+
+```
+python app/app.py
+```
+
+If you encounter errors connecting to the database, you may have tried running the application while inside the `app` folder. If so, either modify the `DATABASE_FILE` variable in `config.py` and set the database file path relative to your current working directory or type `cd ..` in the terminal to return to the root project folder.
+
+When you run the `app.py` script, it will provide the host the application is running on in the terminal. Either click the host where it says "Running on http://..." or type the host into the browser of your choice.
+
+When you access the application in your browser, you will see PyMarts landing page where you will be prompted to log in or register.
+
+### Testing Login System
+When in the login part of the application, type in the username and password for a user and press the "Log In" button to log in as that user. If the username doesn't exist or is incorrect, or the password provided is incorrect, an alert will show saying "Incorrect username or password". If you successfully log in, you will be brought to the user dashboard page.
+
+If you enter in a correct username but incorrectly enter the password, it display an alert saying "Incorrect password." It will also show how many attempts you have left.
+
+#### Blocked Users
+If you incorrectly enter the password for a valid username, it will be logged in a Flask session variable. If you make a mistake three consecutive times, the account is permanently blocked. Users that are blocked will have a '1' in the 'blocked' field in the database. Non-blocked users have a '0'.
+
+#### Demo Users
+I provided three different testing users with different access levels for testing purposes. Their credentials are shown below:
+
+   <div align="center" style="display: flex; justify-content: center">
+
+   | Username | Password | Access Level |
+   | -------- | -------- | ------------ |
+   | test_standard     | Password123! | Standard |
+   | test_dm   | Ilikepie1% | Department Manager |
+   | test_admin   | I'mADM1N!# | Administrator |
+   
+   </div>
+
+### Testing Registration System
+
+#### Strong Password Generation
+
+### Testing Access Levels
+

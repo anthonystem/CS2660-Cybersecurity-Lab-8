@@ -38,10 +38,9 @@ class DatabaseManager:
         
         # Add dummy data to table if in test mode.
         if test_mode:
-            test_password = "Password123!"
-            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_standard", hash_password(test_password), "STANDARD")) 
-            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_dm", hash_password(test_password), "DEPARTMENT_MANAGER")) 
-            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_admin", hash_password(test_password), "ADMIN")) 
+            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_standard", hash_password("Password123!"), "STANDARD")) 
+            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_dm", hash_password("Ilikepie1%"), "DEPARTMENT_MANAGER")) 
+            cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?);", ("test_admin", hash_password("I'mADM1N!#"), "ADMIN")) 
 
         connection.commit()
         cursor.close()
