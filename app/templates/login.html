@@ -3,6 +3,12 @@
     <section class="form-section">
         <h1>Sign In</h1>
 
+        {% for success in success_alerts %}
+        <div class="alert alert-success" role="alert">
+            <p>{{ success }}</p>
+        </div>
+        {% endfor %}
+
         {% for error in error_alerts %}
         <div class="alert alert-failure" role="alert">
             <p>{{ error }}</p>

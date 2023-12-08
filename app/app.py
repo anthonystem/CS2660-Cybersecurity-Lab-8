@@ -1,5 +1,5 @@
 import authentication
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, flash, render_template, redirect, request, session, url_for
 import sqlite3
 import config
 
@@ -25,17 +25,25 @@ def logout():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    successes = []
+    errors = []
     # Render dashboard if session is already set.
     if session.get("user_id", None) is not None:
         return redirect(url_for("dashboard"))
     
+    if session.get("generated_password", None) is not None:
+        successes.append(f"Registration successful. Your strong password is \"{session['generated_password']}\". Please log in.")
+        session.pop("generated_password")
+    elif session.get("registration_success", None) is not None:
+        successes.append(f"Registration successful. Please log in.")
+        session.pop("registration_success")
+
     # Start session to track login attempts if not already started.
     if session.get("login_attempts", None) is None:
         session["current_login_attempt_username"] = None
         session["previous_login_attempt_username"] = None
         session["login_attempts"] = 0
     
-    errors = []
     if request.method == "POST":
         ### Get login form data.
         username = request.form.get("username")
@@ -59,7 +67,7 @@ def login():
                 # Check if blocked and then authenticate.
                 if blocked:
                     errors.append("This account is blocked.")
-                    return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
+                    return render_template("login.html", title="PyMart Intranet System | Login", page="login", success_alerts=successes, error_alerts=errors)
                 elif stored_password is not None:
                     valid_credentials = authentication.authenticate(password, stored_password)
                     print(valid_credentials)
@@ -68,7 +76,7 @@ def login():
             errors.append("Error establishing a database connection. Please contact the system administrator.")
             cursor.close()
             connection.close()
-            return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
+            return render_template("login.html", title="PyMart Intranet System | Login", page="login", success_alerts=successes, error_alerts=errors)
 
         ### Handle valid and invalid credentials.
         # Redirect user to dashboard and initialize session if correct login data.
@@ -107,7 +115,7 @@ def login():
         connection.close()
         
 
-    return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
+    return render_template("login.html", title="PyMart Intranet System | Login", page="login", success_alerts=successes, error_alerts=errors)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -119,49 +127,69 @@ def register():
     errors = []
     if request.method == "POST":
         new_username = request.form.get("new-username")
-        new_password = request.form.get("new-password")
-        password_confirmation = request.form.get("password-confirmation")
+        generate = request.form.get("generate-password")
+        new_password = None
 
         valid_credentials = True
-        try:
-            # Check password matches confirmation password.
-            if new_password == password_confirmation:
+        # Handle password generator if requested.
+        if generate:
+            # Generate and hash new password.
+            new_password = authentication.generate_strong_password(length=8, max_attempts=1000)
+            session["generated_password"] = new_password
+            try:
+                # Check if username input is valid.
+                if not authentication.validate_username(new_username):
+                    errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
+                    valid_credentials = False
+
                 # Check if username exists already.
                 if authentication.username_exists(new_username):
                     errors.append("Username is already taken. Please try again.")
                     valid_credentials = False
-                # Check that username meets requirements.
-                if not authentication.validate_username(new_username):
-                    errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
+   
+            except sqlite3.OperationalError:
+                errors.append("Error establishing a database connection. Please contact the system administrator.")
+                return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
+        else:
+            # Handle normal username/password creation.
+            new_password = request.form.get("new-password")
+            password_confirmation = request.form.get("password-confirmation")
+            try:
+                # Check password matches confirmation password.
+                if new_password == password_confirmation:
+                    # Check that username meets requirements.
+                    if not authentication.validate_username(new_username):
+                        errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
+                        valid_credentials = False
+                    # Check that password meets requirements described in password policy.
+                    if not authentication.validate_password(new_password):
+                        errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
+                        valid_credentials = False
+                else:
+                    errors.append("Passwords do not match. Please try again.")
                     valid_credentials = False
-                # Check that password meets requirements described in password policy.
-                if not authentication.validate_password(new_password):
-                    errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
-                    valid_credentials = False
-            else:
-                errors.append("Passwords do not match. Please try again.")
-                valid_credentials = False
-        except sqlite3.OperationalError:
-            errors.append("Error establishing a database connection. Please contact the system administrator.")
-            cursor.close()
-            connection.close()
-            return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
+            except sqlite3.OperationalError:
+                errors.append("Error establishing a database connection. Please contact the system administrator.")
+                return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
 
         # Add user to database (default access level to "STANDARD") if valid credentials.
         if valid_credentials:
             # Hash password and insert information into database.
+            print(new_password)
             new_password = authentication.hash_password(new_password)
-
+            print(new_password)
             connection = sqlite3.connect(config.DATABASE_FILE)
             cursor = connection.cursor()
 
             # Default access level to STANDARD.
             cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?)", (new_username, new_password, "STANDARD"))
             connection.commit()
+
             cursor.close()
             connection.close()
 
             # Redirect to login.
+            session["registration_success"] = True
             return redirect(url_for("login"))
 
     return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
