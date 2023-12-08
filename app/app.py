@@ -29,23 +29,41 @@ def login():
     if session.get("user_id", None) is not None:
         return redirect(url_for("dashboard"))
     
+    # Start session to track login attempts if not already started.
+    if session.get("login_attempts", None) is None:
+        session["current_login_attempt_username"] = None
+        session["previous_login_attempt_username"] = None
+        session["login_attempts"] = 0
+    
     errors = []
     if request.method == "POST":
         ### Get login form data.
         username = request.form.get("username")
         password = request.form.get("password")
+        session["previous_login_attempt_username"] = session["current_login_attempt_username"]
+        session["current_login_attempt_username"] = username
 
         ### Check if input credentials are in the database.
         connection = sqlite3.connect(config.DATABASE_FILE)
         cursor = connection.cursor()
 
         valid_credentials = False
+        account_exists = False
         try:
-            cursor.execute("SELECT password FROM Users WHERE username = ?", (username,))
-            stored_password = cursor.fetchone()
+            cursor.execute("SELECT EXISTS(SELECT 1 FROM Users WHERE username = ? LIMIT 1)", (username,))     
+            if cursor.fetchone()[0] == 1:   
+                account_exists = True   
+                cursor.execute("SELECT user_id, username, password, access_level, blocked FROM Users WHERE username = ?", (username,))
+                user_id, username, stored_password, access_level, blocked = cursor.fetchone()
 
-            if stored_password is not None:
-                valid_credentials = authentication.authenticate(password, stored_password[0])
+                # Check if blocked and then authenticate.
+                if blocked:
+                    errors.append("This account is blocked.")
+                    return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
+                elif stored_password is not None:
+                    valid_credentials = authentication.authenticate(password, stored_password)
+                    print(valid_credentials)
+
         except sqlite3.OperationalError:
             errors.append("Error establishing a database connection. Please contact the system administrator.")
             cursor.close()
@@ -57,19 +75,37 @@ def login():
         # Otherwise, append incorrect username/password error and re-render login.
         if valid_credentials:
             # Get user_id and create session with user_id and username; redirect to dashboard after.
-            cursor.execute("SELECT user_id, username, access_level FROM Users WHERE username = ?", (username,))
-            user_id, username, access_level = cursor.fetchone()
+            session["login_attempts"] = 0
             session["user_id"] = user_id
             session["username"] = username
             session["access_level"] = access_level
             cursor.close()
             connection.close()
             return redirect(url_for("dashboard"))
-        
+        elif account_exists:
+            # Increment failed login attempts if trying the same username otherwise reset.
+            if session["current_login_attempt_username"] == session["previous_login_attempt_username"] or \
+                session["previous_login_attempt_username"] is None:
+                session["login_attempts"] += 1
+            else:
+                # Change previous login attempt username and reset attempts.
+                session["login_attempts"] = 1
+                
+            if session["login_attempts"] < 3:
+                errors.append("Incorrect password. Please try again.")
+                errors.append(f"You have {3 - session['login_attempts']} login attempts remaining.")
+
+            if account_exists and session["login_attempts"] >= 3:
+                authentication.block_user(session["current_login_attempt_username"])
+                errors.append("This account is blocked.")
+                session["login_attempts"] = 0
+    
+        else:
+            errors.append("Incorrect username or password. Please try again.")
+
         cursor.close()
         connection.close()
         
-        errors.append("Incorrect username or password. Please try again.")
 
     return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
 
@@ -119,6 +155,7 @@ def register():
             connection = sqlite3.connect(config.DATABASE_FILE)
             cursor = connection.cursor()
 
+            # Default access level to STANDARD.
             cursor.execute("INSERT INTO Users (username, password, access_level) VALUES (?, ?, ?)", (new_username, new_password, "STANDARD"))
             connection.commit()
             cursor.close()

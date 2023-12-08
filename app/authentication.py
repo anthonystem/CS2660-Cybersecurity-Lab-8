@@ -142,6 +142,14 @@ def block_user(username: str):
     Args:
         username (str): The username of the user to block.
     """
+    connection = sqlite3.connect(config.DATABASE_FILE)
+    cursor = connection.cursor()
+
+    cursor.execute("UPDATE Users SET blocked = 1 WHERE username = ?", (username,))
+    connection.commit()
+
+    cursor.close()
+    connection.close()
 
 
 def has_access_permission(user_access_level: str, minimum_access_level: str) -> bool:
@@ -173,7 +181,7 @@ def has_access_permission(user_access_level: str, minimum_access_level: str) -> 
     return user_access_value >= minimum_access_value
 
     
-
+block_user("test_standard")
     
 
     
