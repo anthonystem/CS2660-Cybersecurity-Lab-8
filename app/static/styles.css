@@ -239,6 +239,9 @@ main {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+.dashboard p {
+  margin-bottom: 1rem;
+}
 
 .application-grid {
   display: grid;
@@ -273,6 +276,9 @@ main {
   text-decoration: none;
   color: black;
 }
+.card p {
+  text-align: center;
+}
 
 .card:hover {
   transition: 0.25s ease-out;
@@ -290,6 +296,63 @@ main {
   right: 0;
   bottom: 0;
   z-index: -1;
+}
+
+.time-report {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.inventory {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.job-application-manager {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.admin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.access-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.access-message h2 {
+  font-family: "Inter", sans-serif;
+}
+.access-message a {
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  background-color: #058ED9;
+  color: black;
+  text-decoration: none;
+  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+  transition: 0.5s;
+  margin: 1rem;
+}
+.access-message a:hover {
+  transition: 0.5s;
+  box-shadow: inset 0px 0px 0px 2px #001b29;
 }
 
 /* ########## Media Queries/Breakpoints ########## */

@@ -140,7 +140,6 @@
         border-radius: 4px;
         font-family: "Roboto", sans-serif;
         transition: 0.5s;
-        
     }
 
     .landing-button:hover {
@@ -276,6 +275,10 @@ main {
         font-size: 1.5rem;
         margin-bottom: 1rem;
     }
+
+    p {
+        margin-bottom: 1rem;
+    }
 }
 
 .application-grid {
@@ -311,6 +314,10 @@ main {
             color: black;
         }
     }
+
+    p {
+        text-align: center;
+    }
 }
 
 .card:hover {
@@ -332,6 +339,67 @@ main {
     z-index: -1;
 }
 
+.time-report {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.inventory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.job-application-manager {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.admin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.access-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    h2 {
+        font-family: "Inter", sans-serif;
+    }
+
+    a {
+        padding: 0.6rem 1rem 0.6rem 1rem;
+        background-color: #058ED9;
+        color: black;
+        text-decoration: none;
+        border-radius: 4px;
+        font-family: "Roboto", sans-serif;
+        transition: 0.5s;
+        margin: 1rem;
+    }
+
+    a:hover {
+        transition: 0.5s;
+        -webkit-box-shadow: inset 0px 0px 0px 2px #058ED9;
+        -moz-box-shadow: inset 0px 0px 0px 2px #058ED9;
+        box-shadow: inset 0px 0px 0px 2px #001b29;
+    }
+}
 
 /* ########## Media Queries/Breakpoints ########## */
 @media (min-width: 768px) {

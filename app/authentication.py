@@ -136,6 +136,14 @@ def username_exists(test_username: str) -> bool:
     return True if result[0] == 1 else False
 
 
+def block_user(username: str):
+    """Blocks a specified user from being able to log in.
+
+    Args:
+        username (str): The username of the user to block.
+    """
+
+
 def has_access_permission(user_access_level: str, minimum_access_level: str) -> bool:
     """Checks if a user has a sufficient access level for access permission.
     Access levels include the following:

@@ -1,4 +1,5 @@
 app\pymart_database.db-journal
+.DS_Store
 instance
 __pycache__
 venv

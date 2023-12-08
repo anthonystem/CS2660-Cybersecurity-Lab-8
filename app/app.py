@@ -1,5 +1,4 @@
 import authentication
-from database import Database
 from flask import Flask, render_template, redirect, request, session, url_for
 import sqlite3
 import config
@@ -40,13 +39,18 @@ def login():
         connection = sqlite3.connect(config.DATABASE_FILE)
         cursor = connection.cursor()
 
-        cursor.execute("SELECT password FROM Users WHERE username = ?", (username,))
-        stored_password = cursor.fetchone()
+        valid_credentials = False
+        try:
+            cursor.execute("SELECT password FROM Users WHERE username = ?", (username,))
+            stored_password = cursor.fetchone()
 
-        if stored_password is None:
-            valid_credentials = False
-        else:   
-            valid_credentials = authentication.authenticate(password, stored_password[0])
+            if stored_password is not None:
+                valid_credentials = authentication.authenticate(password, stored_password[0])
+        except sqlite3.OperationalError:
+            errors.append("Error establishing a database connection. Please contact the system administrator.")
+            cursor.close()
+            connection.close()
+            return render_template("login.html", title="PyMart Intranet System | Login", page="login", error_alerts=errors)
 
         ### Handle valid and invalid credentials.
         # Redirect user to dashboard and initialize session if correct login data.
@@ -83,23 +87,29 @@ def register():
         password_confirmation = request.form.get("password-confirmation")
 
         valid_credentials = True
-        # Check password matches confirmation password.
-        if new_password == password_confirmation:
-            # Check if username exists already.
-            if authentication.username_exists(new_username):
-                errors.append("Username is already taken. Please try again.")
+        try:
+            # Check password matches confirmation password.
+            if new_password == password_confirmation:
+                # Check if username exists already.
+                if authentication.username_exists(new_username):
+                    errors.append("Username is already taken. Please try again.")
+                    valid_credentials = False
+                # Check that username meets requirements.
+                if not authentication.validate_username(new_username):
+                    errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
+                    valid_credentials = False
+                # Check that password meets requirements described in password policy.
+                if not authentication.validate_password(new_password):
+                    errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
+                    valid_credentials = False
+            else:
+                errors.append("Passwords do not match. Please try again.")
                 valid_credentials = False
-            # Check that username meets requirements.
-            if not authentication.validate_username(new_username):
-                errors.append("Username must be at least 3 characters and at most 16 characters long. Please try again.")
-                valid_credentials = False
-            # Check that password meets requirements described in password policy.
-            if not authentication.validate_password(new_password):
-                errors.append("The password you provided does not meet the requirements set by the password policy. Please try again.")
-                valid_credentials = False
-        else:
-            errors.append("Passwords do not match. Please try again.")
-            valid_credentials = False
+        except sqlite3.OperationalError:
+            errors.append("Error establishing a database connection. Please contact the system administrator.")
+            cursor.close()
+            connection.close()
+            return render_template("register.html", title="PyMart Intranet System | Register", page="register", error_alerts=errors)
 
         # Add user to database (default access level to "STANDARD") if valid credentials.
         if valid_credentials:
@@ -126,7 +136,7 @@ def dashboard():
     if session.get("user_id", None) is None:
         return redirect(url_for("index"))
     
-    return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard", username=session["username"])
+    return render_template("dashboard.html", title="PyMart Intranet System | Dashboard", page="dashboard", username=session["username"], access_level=session["access_level"])
 
 
 @app.route("/time-report")
