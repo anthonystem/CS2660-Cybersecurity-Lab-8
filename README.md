@@ -86,6 +86,20 @@ pip install -r requirements.txt
 
 You can also manually install each module listed in the requirements file if needed.
 
+### Database Setup
+I provide the database file for you, which is `pymart_database.db`. However, if you need to re-create it, simply execute the `database_manager.py` which will create a fresh database file with three testing users for you (unless you set test_mode=False in the setup call, in which case it will only create an empty Users table).
+
+The database sqlite3 schema is as follows:
+
+```sql
+CREATE TABLE IF NOT EXISTS Users (
+    user_id integer PRIMARY KEY,
+    username text NOT NULL,
+    password text NOT NULL,
+    access_level text NOT NULL DEFAULT 'STANDARD',
+    blocked integer NOT NULL DEFAULT 0
+);
+```
 
 ### Running the Flask Application
 While inside the project directory, execute the following command to run the Flask application:
@@ -101,7 +115,7 @@ When you run the `app.py` script, it will provide the host the application is ru
 When you access the application in your browser, you will see PyMarts landing page where you will be prompted to log in or register.
 
 ### Testing Login System
-When in the login part of the application, type in the username and password for a user and press the "Log In" button to log in as that user. If the username doesn't exist or is incorrect, or the password provided is incorrect, an alert will show saying "Incorrect username or password". If you successfully log in, you will be brought to the user dashboard page.
+When in the login part of the application, type in the username and password for a user and press the "Log In" button to log in as that user. If the username doesn't exist or is incorrect, or the password provided is incorrect, an alert will show saying "Incorrect username or password". If you successfully log in, a session will be created with the user_id, username, and access level, and you will be brought to the user dashboard page.
 
 If you enter in a correct username but incorrectly enter the password, it display an alert saying "Incorrect password." It will also show how many attempts you have left.
 
@@ -121,9 +135,15 @@ I provided three different testing users with different access levels for testin
    
    </div>
 
-### Testing Registration System
+If you need to reset the database, you can execute database_manager.py and it will recreate the entire file with the demo users (if you call the setup() function in demo mode).
 
-#### Strong Password Generation
+### Testing Registration System
+On the registration page, you will be prompted to enter in a new username, a new password, and you will be asked to confirm your password. The password policy requirements are shown on the registration form so you can easily create a new password.
+
+Usernames must be between 3 and 16 characters (inclusive) and passwords must abide by the password policy outlined in the project requirements. When the input username, password, and confirmation are valid per the JavaScript client-sided validation, you will be able to submit/POST the data. When the input data is posted, Flask will perform back-end validation to ensure the requirements are all met. If it encounters any invalid inputs, it will re-render the registration page show the corresponding error(s) to the user, and prompt them to try again. 
+
+#### Register With Strong Password Generation
+If a user wishes, they can click the checkbox for "Generate Strong Password" which will generate an 8 character long strong password that abides by the password policy. In this case, the user only needs to enter a username (and click the checkbox) to POST the form. If successful, the password will be temporarily added to the session, and the user will be rerouted to the login page and where new password will be shown and they can log in with it (and their username).
 
 ### Testing Access Levels
-
+When successfully logged in as a user, you will be brought to the dashboard. All four system application links will be displayed on the dashboard alongside the user's access level. If a user clicks on an application link, they will be brought to the corresponding page. If they have sufficient access permissions, it will display "You have successfully accessed the [application] application." If they have insufficient permissions, it will say "You are not authorized to access this page." In either case, a button will also be provided to let the user return back to the dashboard.

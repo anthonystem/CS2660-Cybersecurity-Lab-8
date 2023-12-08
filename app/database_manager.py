@@ -54,6 +54,7 @@ class DatabaseManager:
         except OSError:
             print(f"### ERROR ### Could not find '{config.DATABASE_FILE}' when attempting delete.")
 
+
 dbm = DatabaseManager()
 dbm.nuke()
 dbm.setup(test_mode=True)
