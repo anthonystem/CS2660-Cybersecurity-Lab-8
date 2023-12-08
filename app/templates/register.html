@@ -76,11 +76,11 @@
                 passwordConfirmationInputBox.type = "hidden";
                 checkFormComplete();
             } else {
-                passwordInputBox.type = "";
+                passwordInputBox.type = "password";
                 passwordInputLabel.style.display = "";
                 passwordRequirements.style.display = "";
                 passwordConfirmationLabel.style.display = "";
-                passwordConfirmationInputBox.type = "";
+                passwordConfirmationInputBox.type = "password";
                 checkFormComplete();
             }
         }
@@ -121,6 +121,7 @@
                 usernameRequirement.firstElementChild.classList.add("fa-circle-xmark");
                 usernameRequirement.firstElementChild.classList.remove("fa-check-circle");
                 usernameRequirement.style.color = "";
+                usernameEntered = false;
             }
 
             checkFormComplete()
