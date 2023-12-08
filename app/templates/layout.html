@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/styles.css">
+        <script src="https://kit.fontawesome.com/c1167ef518.js" 
+                integrity="sha512-/xDJo0EoB/oPOJlwsA2kin2jgN/Pqgb6lpxltK+hyTPga3PuqhHfyOJC+Q/Ssghxshfn2E2dg7yGoD+k2eqx3w==" 
+                crossorigin="anonymous">
+        </script>
+    </head>
+    <body>
+        <div class="navigation-bar">
+            <div class="navigation-logo">
+                <img src="../static/media/pymart_logo.svg" alt="PyMart logo.">
+            </div>
+            <div aria-label="Hamburger button open". class="hamburger-button">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <div aria-label="Hamburger button close." class="hamburger-close-button">
+            </div>
+            <nav class="navigation-links">
+                {% if not session["user_id"] %}
+                <a href="/login">Employee Log In</a>
+                <a href="/register">Register</a>
+                {% else %}
+                <a href="/logout">Log Out</a>
+                {% endif %}
+            </nav>
+        </div>
+
+        <main class="{{ page }}">
+            <div class="content-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+        
+        <script type="text/javascript">
+            // ----- Handle Hamburger Menu ----- //
+            const hamburgerButton = document.querySelector(".hamburger-button");
+            const hamburgerCloseButton = document.querySelector(".hamburger-close-button");
+            const navigationLinks = document.querySelector(".navigation-links");
+            
+            // Show navigation links on hamburger button click.
+            hamburgerButton.addEventListener('click', () => {
+                navigationLinks.classList.toggle("show");
+                hamburgerCloseButton.classList.toggle("show");
+            });
+
+            // Hide navigation links on hamburger close button click.
+            hamburgerCloseButton.addEventListener('click', () => {
+                navigationLinks.classList.toggle("show");
+                hamburgerCloseButton.classList.toggle("show");
+            });
+        </script>
+    </body>
+</html>

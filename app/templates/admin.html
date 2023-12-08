@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% block content %}
+{% from 'macros.html' import access_message %}
+    <div class="access-message">{{ access_message(has_access, application) }}</div>
+{% endblock %}

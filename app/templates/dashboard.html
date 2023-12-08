@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Welcome back, {{ username }}.</h1>
+<p><strong>Access level:</strong> {{ access_level }}</p>
+
+<div class="application-grid">
+    <section class="card">
+        <i class="fas fa-clock"></i>
+        <h2>Time Reporting</h2>
+        <p><strong>Minimum Access Level:</strong> STANDARD</p>
+        <p><a class="card-link" href="time-report">Start Time Reporting</a></p>
+    </section>
+    <section class="card">
+        <i class="fas fa-clipboard"></i>
+        <h2>Inventory</h2>
+        <p><strong>Minimum Access Level:</strong> DEPARTMENT_MANAGER</p>
+        <p><a class="card-link" href="inventory">Start Inventory</a></p>
+    </section>
+    <section class="card">
+        <i class="fas fa-handshake"></i>
+        <h2>Application Manager</h2>
+        <p><strong>Minimum Access Level:</strong> DEPARTMENT_MANAGER</p>
+        <p><a class="card-link" href="job-application-manager">Start App. Manager</a></p>
+    </section>
+    <section class="card">
+        <i class="fas fa-id-badge"></i>
+        <h2>Admin Panel</h2>
+        <p><strong>Minimum Access Level:</strong> ADMIN</p>
+        <p><a class="card-link" href="admin">Start Admin Panel</a></p>
+    </section>
+</div>
+{% endblock %}
