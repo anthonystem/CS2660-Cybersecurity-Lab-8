@@ -18,9 +18,13 @@
                 </div>   
             </div>
             <div>
-                <label for="password-input">Password</label>
+                <label id="password-input-label" for="password-input">Password</label>
                 <input type="password" id="password-input" name="new-password" placeholder="Enter a Password" minlength="8" maxlength="25" required>    
-                <div class="help-text">
+                <div class="checkbox">
+                    <input type="checkbox" id="generate-password" name="generate-password" value="generate" onClick="checkGenerator();">
+                    <label for="generate-password">Generate Strong Password</label>
+                </div>
+                <div id="password-requirements" class="help-text">
                     <p id="minimum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Minimum length of 8 characters.</p>
                     <p id="maximum-length-requirement"><i class="fa-regular fa-circle-xmark"></i> Maximum length of 25 characters.</p>
                     <p id="number-requirement"><i class="fa-regular fa-circle-xmark"></i> Must contain at least one number.</p>
@@ -30,7 +34,7 @@
                 </div>       
             </div>
             <div>
-                <label for="password-confirmation">Confirm Password</label>
+                <label id="password-confirmation-label" for="password-confirmation">Confirm Password</label>
                 <input id="password-confirmation" type="password" name="password-confirmation" placeholder="Enter Password Again" minlength="8" maxlength="25" required>  
             </div>
             <div>
@@ -42,11 +46,15 @@
         </div>
     </section>
     <script type="text/javascript">
+        // Generate password elements.
+        const generatePasswordCheckbox = document.getElementById("generate-password");
         // Username input elements.
         const usernameInputBox = document.getElementById("username-input");
         const usernameRequirement = document.getElementById("username-requirement");
         // Password input elements.
         const passwordInputBox = document.getElementById("password-input");
+        const passwordInputLabel = document.getElementById("password-input-label");
+        const passwordRequirements = document.getElementById("password-requirements");
         const minimumLengthRequirement = document.getElementById("minimum-length-requirement");
         const maximumLengthRequirement = document.getElementById("maximum-length-requirement");
         const numberRequirement = document.getElementById("number-requirement");
@@ -57,6 +65,25 @@
         const specialCharacters = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
         // Password confirmation elements.
         const passwordConfirmationInputBox = document.getElementById("password-confirmation");
+        const passwordConfirmationLabel = document.getElementById("password-confirmation-label");
+
+        function checkGenerator() {
+            if(generatePasswordCheckbox.checked) {
+                passwordInputBox.type = "hidden";
+                passwordInputLabel.style.display = "none";
+                passwordRequirements.style.display = "none";
+                passwordConfirmationLabel.style.display = "none";
+                passwordConfirmationInputBox.type = "hidden";
+                checkFormComplete();
+            } else {
+                passwordInputBox.type = "";
+                passwordInputLabel.style.display = "";
+                passwordRequirements.style.display = "";
+                passwordConfirmationLabel.style.display = "";
+                passwordConfirmationInputBox.type = "";
+                checkFormComplete();
+            }
+        }
 
         var usernameInput = usernameInputBox.value;
         var passwordInput = passwordInputBox.value;
@@ -69,7 +96,7 @@
         function checkFormComplete() {
             // Enable create account button if passwords match and policy requirements are met.
             console.log("Check");
-            if(usernameEntered && meetsPasswordPolicy && passwordsMatch) {
+            if(usernameEntered && ((meetsPasswordPolicy && passwordsMatch) || generatePasswordCheckbox.checked)) {
                 console.log("allow!");
                 createAccountButton.disabled = false;
             } else {

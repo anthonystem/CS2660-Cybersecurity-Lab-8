@@ -1,8 +1,10 @@
 import config
 import hashlib
 import os
-from string import ascii_lowercase, ascii_uppercase
+from string import ascii_lowercase, ascii_uppercase, digits
+import secrets
 import sqlite3
+from typing import Union
 
 def hash_password(password: str) -> str:
     """Hashes a given password and pre-pends a salt of
@@ -179,3 +181,46 @@ def has_access_permission(user_access_level: str, minimum_access_level: str) -> 
     print(user_access_value)
     print(minimum_access_value)
     return user_access_value >= minimum_access_value    
+
+def generate_strong_password(length=8, max_attempts=1000) -> Union[str, None]:
+    """Generates a strong password of length 8 that meets the password requirements shown
+    below.
+    - Minimum length is 8.
+    - Maximum length is 25.
+    - Has at least one number.
+    - Has at least one lowercase letter.
+    - Has at least one uppercase letter.
+    - Has at least one special character (" !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~").
+
+
+    Args:
+        length (int, optional): The length of the password to generate. Defaults to 8.
+        max_attempts (int, optional): Maximum number of attempts to generate a password before quitting. Defaults to 1000.
+
+    Returns:
+        Union[str, None]: The generated password or None if max_attempts exausted.
+    """
+    special_characters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+
+    # Create charset. Has all lowercase and uppercase English alphabet letters, as well as
+    # numbers 0-9, and the special characters in the variable above.
+    charset = special_characters + ascii_lowercase + ascii_uppercase + digits
+    print(charset)
+    attempts = 0
+    gen_password = None
+    while attempts < max_attempts:
+        attempts += 1
+        gen_password = ''.join(secrets.choice(charset) for i in range(20))
+        print(sum((c in special_characters) for c in gen_password))
+        if(
+            sum(c.islower() for c in gen_password) >= 1 and
+            sum(c.isupper() for c in gen_password) >= 1 and
+            sum(c.isdigit() for c in gen_password) >= 1 and 
+            sum((c in special_characters) for c in gen_password) >= 1
+        ):
+            break
+    
+    if attempts >= max_attempts:
+        gen_password = None
+    
+    return gen_password

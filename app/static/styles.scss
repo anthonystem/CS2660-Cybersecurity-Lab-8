@@ -194,6 +194,14 @@ main {
         flex-direction: column;
         gap: 1rem;
 
+        .checkbox {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
         div {
             display: flex;
             flex-direction: column;
