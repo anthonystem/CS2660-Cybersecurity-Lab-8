@@ -178,10 +178,4 @@ def has_access_permission(user_access_level: str, minimum_access_level: str) -> 
     
     print(user_access_value)
     print(minimum_access_value)
-    return user_access_value >= minimum_access_value
-
-    
-block_user("test_standard")
-    
-
-    
+    return user_access_value >= minimum_access_value    

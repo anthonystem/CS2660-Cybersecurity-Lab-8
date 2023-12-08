@@ -19,7 +19,7 @@ def index():
 
 @app.route("/logout")
 def logout():
-    session.pop("user_id", None)
+    session.clear()
     return redirect(url_for("index"))
 
 
